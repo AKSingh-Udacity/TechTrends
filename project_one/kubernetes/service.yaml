@@ -17,7 +17,7 @@ spec:
   ports:
   - port: 4111
     protocol: TCP
-    targetProtocol: 3111       
+    targetPort: 3111       
 
   #define pods service type managed by this service  
   selectors:
