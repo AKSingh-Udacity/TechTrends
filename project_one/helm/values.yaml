@@ -1,0 +1,56 @@
+#apiVersion to set the api endpoint to create values resource 
+apiVersion: v1
+
+#kind to define the type of helm resource
+kind: values
+
+#Namespace for the ojject identity for sandbox namespace
+Namespace:
+  name: sandbox
+
+#service is defined for our helm 
+service:
+    port: 4111
+    targetPort: 3111
+    protocol: TCP
+    type: ClusterIP        
+
+#define the desired state of pod configr as run the techtrends inside container
+#pull the image if it's not available on the current host    
+image:
+  repository: aksresonance/techtrends
+  tag: latest
+  pullPolicy: ifNotPresent
+
+replicaCOunt: 1
+
+#Set the resource limits and requests for an application
+resources: 
+  limits:
+    memory: "500m"
+    cpu: 128Mi    
+  requests: 
+    memory: "250m"
+    cpu: 64Mi
+
+#expose 3111 port to which container will listen to
+ports:
+  - containerPort: 3111
+
+#define the rules for liveness port, verify the application on healthz route.
+#on application port 3111. Application is not responsive then pod will automatically restarted.     
+livenessPort:
+  httpGet:
+    path: "/healthz"
+    port: 3111 
+
+#verify the application on the healthz route
+#on application port 3111.This pod take traffic if application is responsive.    
+readinessPort:
+  httpGet:
+    path: "/healthz"
+    port: 3111
+
+
+
+          

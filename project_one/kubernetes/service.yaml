@@ -1,0 +1,26 @@
+#set the api endpointsto create service resource
+apiVersion: v1
+
+#type of resource
+kind: Service
+
+#set the parameters for object identification
+metadata:
+  labels:
+    app: techtrends        
+  name: techtrends 
+  namespace: sandbox   
+
+spec:
+  #define the ports that service will serve on as it is expose to 4111
+  #direct the traffic to the pods on port 3111, using TCP        
+  ports:
+  - port: 4111
+    protocol: TCP
+    targetProtocol: 3111       
+
+  #define pods service type managed by this service  
+  selectors:
+  type: ClusterIP         
+
+

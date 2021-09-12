@@ -1,0 +1,10 @@
+apiVersion: v1
+name: techtrends
+version: 1.0.0
+keywords: 
+  - techtrends
+maintainers:
+  - name: Ankush Kumar Singh
+    email: ankushkumarssm1999@gmail.com    
+
+        

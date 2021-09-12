@@ -1,0 +1,66 @@
+#set the api endpoint used to create deployment resource
+apiVersion: apps/v1
+
+#define the type of the resource
+kind: Deployment
+
+#set the parameters for object identification
+metadata:     
+  name: techtrends
+  namespace: sandbox
+
+#define the desired configurations for the deployment resource
+spec: 
+  #set the number of replicas as it will create replica Set to manage 1 pod of techtrends application
+  replicas: 1
+
+  #identify the pods label as techtrends to be managed by this deployment 
+  selector:
+    matchLabels:
+      app: techtrends
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate      
+  template:
+    metadata:
+      labels: 
+        app: techtrends
+    spec:        
+      containers:
+        - image: aksresonance/techtrends:latest
+          imagePullPolicy: IfNotPresent
+          name: techtrends
+
+          #set the resources requests and limits for an application
+          resources: 
+
+            #set pod allocation of 64 Mebibytes and 250 milliCPUs
+            requests:
+              memory: "64Mi"
+              cpu: 250m
+            
+            #limit pods to not surpass 128 Mebibytes and 500 milliCPUs  
+            limits:
+              memory: "128Mi"
+              cpu: 500m          
+          ports:
+            - containerPort: 3111 
+
+          #define the rules for liveness probes      
+          livenessProbe:
+            httpGet:
+              path: /healtz
+              port: 3111        
+
+          #define the rules for readiness probes    
+          readinessProbe:
+            httpGet:
+              path: /healtz
+              port: 3111        
+         
+
+
+
+             
