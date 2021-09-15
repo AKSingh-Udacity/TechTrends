@@ -40,8 +40,8 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: ./project/techtrends
-          file: ./project/Dockerfile
+          context: ./project_one/techtrends
+          file: ./project_one/Dockerfile
           platforms: linux/amd64
           push: true
           tags: aksresonance/techtrends:latest   #IMAGE TO SYNC ON DOCKER REGISTRY
