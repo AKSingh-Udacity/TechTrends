@@ -56,7 +56,7 @@ def healthcheck():
 @app.route('/metrics')
 def metrics():
     connection = get_db_connection()
-    posts = connection.execute('SELECT * FROM posts').fetcgall()
+    posts = connection.execute('SELECT * FROM posts').fetchall()
     postsNumber = len(posts)
     connection.close()
     return app.response_class(
