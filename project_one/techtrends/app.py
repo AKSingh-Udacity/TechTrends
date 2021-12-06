@@ -5,12 +5,14 @@ from datetime import datetime
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
 from werkzeug.exceptions import abort
 
-total_db_connections = {'ttyconnections':0}
+db_count = 0
 # Function to get a database connection.
 # This function connects to database with the name `database.db`
 def get_db_connection():
     connection = sqlite3.connect('database.db')
     connection.row_factory = sqlite3.Row
+    global db_count
+    db_count = db_count +1 
     return connection
 
 # Function to get a post using its ID
@@ -47,10 +49,11 @@ def index():
 #endpoints for healtz
 @app.route('/healthz')
 def healthcheck():
-    return app.response_class(
+    response = app.response_class(
         response=json.dumps({ "result":"OK - healthy" }),
         status=200,
         mimetype='application/json')
+    return response
 
 #endpoints for metrics
 @app.route('/metrics')
@@ -59,11 +62,12 @@ def metrics():
     posts = connection.execute('SELECT * FROM posts').fetchall()
     postsNumber = len(posts)
     connection.close()
-    return app.response_class(
-        response=json.dumps({"db_connection_count": str(total_db_connections.get('ttyconnections')), "post_count":postNumber}),
+    response =  app.response_class(
+        response=json.dumps({"db_connection_count": db_count, "post_count": postNumber}),
         status=200,
         mimetype='application/json'
         )
+    return response
    
 # Define how each individual article is rendered 
 # If the post ID is not found a 404 page is shown
