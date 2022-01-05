@@ -12,7 +12,7 @@ def get_db_connection():
     connection = sqlite3.connect('database.db')
     connection.row_factory = sqlite3.Row
     global db_count
-    db_count = db_count +1 
+    db_count += 1 
     return connection
 
 # Function to get a post using its ID
@@ -25,14 +25,12 @@ def get_post(post_id):
 
 #Define function to handle logs
 def logInfo(mesg):
-    dateTime = datetime.now()
-    timeStr = dateTime.strftime("%d-%b-%Y (%H:%M:%S.%f)")
-    logging.info(timeStr + " " + mesg)
+     time = datenow.now().strftime('%d-%m-%Y, %H:%M:%S')  #reviewer suggestion
+     return app.logger.info('%(time)s, %(message)s' %{"time": time, "message": message})
 
 def logError(mesg):
-    dateTime = datetime.now()
-    timeStr = dateTime.strftime("%d-%b-%Y (%H:%M:%S.%f)")
-    logging.error(timeStr + " " + mesg)
+     time = datenow.now().strftime('%d-%m-%Y, %H:%M:%S')  #reviewer suggestion
+     return app.logger.error('%(time)s, %(message)s' %{"time": time, "message": message})
 
 # Define the Flask application
 app = Flask(__name__)

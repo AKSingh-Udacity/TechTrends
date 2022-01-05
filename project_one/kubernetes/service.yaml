@@ -21,6 +21,7 @@ spec:
 
   #define pods service type managed by this service  
   selectors:
+    app: techtrends
   type: ClusterIP         
 
 
