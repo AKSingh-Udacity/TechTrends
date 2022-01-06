@@ -28,6 +28,7 @@ Where:
 - 404 page - is rendered when an article ID does not exist is accessed
 
 And lastly, the first prototype of the application is storing and accessing posts from the "POSTS" SQL table. A post entry contains the post ID (primary key), creation timestamp, title, and content. The "POSTS" table schema can be examined below:
+
 ![image](https://user-images.githubusercontent.com/37039539/148359858-13810ea5-e7b4-49e6-8fdc-83913d9c8d02.png)
 
 # Project Steps Overview:
@@ -49,8 +50,8 @@ And lastly, the first prototype of the application is storing and accessing post
 
 # Project Checklist Steps
 - Access your techtrends on [port](http://127.0.0.1:7111).
-- Kubernetes pods, resources creation via k3s.
-- Argocd deployment on argocd
-- Github Action section of your repository.
-- Helm chart execution
+- Create a GitHub Action to build and push the application
+- Deploy a Kubernetes cluster using k3s
+- Deploy TechTrends with ArgoCD.
+- Create a Helm Chart
 
