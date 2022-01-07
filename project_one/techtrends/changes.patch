@@ -1,0 +1,121 @@
+diff --git a/project_one/docker_commands b/project_one/docker_commands
+index 83bea76..05eb552 100644
+--- a/project_one/docker_commands
++++ b/project_one/docker_commands
+@@ -1,6 +1,6 @@
+ ## Docker commands used to build the application 
+ # TODO: insert the docker build command
+-vvdn@4313--IOT--GGN:~/SUSE_CLOUD_NATIVE_SCHR/phase_2/nd064_course_1/project$ sudo docker build -f Dockerfile -t techtrends techtrends
++sudo docker build -f Dockerfile -t techtrends techtrends
+ Sending build context to Docker daemon  23.42MB
+ Step 1/9 : FROM python:2.7
+  ---> 68e7be49c28c
+@@ -8,11 +8,12 @@ Step 2/9 : LABEL maintainer "Ankush Kumar Singh"
+ 
+ ## Docker commands used to run the application
+ # TODO: insert the docker run command
+-vvdn@4313--IOT--GGN:~/SUSE_CLOUD_NATIVE_SCHR/phase_2/nd064_course_1/project$ sudo docker run -d -p 7111:3111 techtrends
++sudo docker run -d -p 7111:3111 techtrends
+ eb800caba6cc67fd5b570d8c6cf5e94c1e002ab2ec62b388f85985d81401c2b6
++
+ ## Docker commands used to get the application logs
+ # TODO: insert the docker logs command
+-vvdn@4313--IOT--GGN:~/SUSE_CLOUD_NATIVE_SCHR/phase_2/nd064_course_1/project$ sudo docker logs eb800caba6cc67fd5b570d8c6cf5e94c1e002ab2ec62b388f85985d81401c2b6
++sudo docker logs eb800caba6cc67fd5b570d8c6cf5e94c1e002ab2ec62b388f85985d81401c2b6
+ 
+ ## Logs from the container running the TechTrends application
+ # TODO: paste logs from the Docker container
+diff --git a/project_one/helm/templates/deploy.yaml b/project_one/helm/templates/deploy.yaml
+index 79ddd29..5e1bb54 100644
+--- a/project_one/helm/templates/deploy.yaml
++++ b/project_one/helm/templates/deploy.yaml
+@@ -3,14 +3,14 @@ kind: Deployment
+ metadata:
+   labels:
+     app: {{ .Values.name }}
+-    name: techtrends
++    name: {{ .Values.name }}   #mentor-to-do-remove hardcoded
+   namespace: {{ .Values.namespace.name }}
+ 
+ spec:
+   replicas: {{ .Values.replicaCount }} 
+   selector:
+     matchLabels:
+-      app: techtrends
++      app: {{ .Values.name }}
+   strategy:
+     rollingUpdate:
+       maxSurge: 25%
+@@ -19,12 +19,12 @@ spec:
+   template:
+     metadata:
+       labels:
+-        app: techtrends
++        app: {{ .Values.name }}
+     spec:
+       containers:
+-      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
++      - image: aksresonance/{{ .Values.image.repository }}:{{ .Values.image.tag }}    #docker-hub-user-added
+         imagePullPolicy: {{ .Values.image.pullPolicy }}
+-        name: techtrends
++        name: {{ .Values.name }}
+         ports:
+         - containerPort: {{ .Values.ports.containerPort }}
+           protocol : {{ .Values.containerPorts.http.protocol }}
+diff --git a/project_one/helm/values.yaml b/project_one/helm/values.yaml
+index 7a246b6..3b77ec7 100644
+--- a/project_one/helm/values.yaml
++++ b/project_one/helm/values.yaml
+@@ -5,7 +5,7 @@ apiVersion: v1
+ kind: values
+ 
+ #Namespace for the ojject identity for sandbox namespace
+-Namespace:
++namespace:
+   name: sandbox
+ 
+ #service is defined for our helm 
+@@ -22,7 +22,7 @@ image:
+   tag: latest
+   pullPolicy: ifNotPresent
+ 
+-replicaCOunt: 1
++replicaCount: 1    #corrected typo error replicaCOunt
+ 
+ #Set the resource limits and requests for an application
+ resources: 
+@@ -39,17 +39,15 @@ ports:
+ 
+ #define the rules for liveness port, verify the application on healthz route.
+ #on application port 3111. Application is not responsive then pod will automatically restarted.     
+-livenessPort:
++livenessProbe:                    #mentor-to-do typo error port to probe
+   httpGet:
+     path: "/healthz"
+-    port: 3111 
+ 
+ #verify the application on the healthz route
+ #on application port 3111.This pod take traffic if application is responsive.    
+-readinessPort:
++readinessProbe:
+   httpGet:
+     path: "/healthz"
+-    port: 3111
+ 
+ 
+ 
+diff --git a/project_one/kubernetes/service.yaml b/project_one/kubernetes/service.yaml
+index 3557912..c0a8c44 100644
+--- a/project_one/kubernetes/service.yaml
++++ b/project_one/kubernetes/service.yaml
+@@ -21,6 +21,7 @@ spec:
+ 
+   #define pods service type managed by this service  
+   selectors:
++    app: techtrends
+   type: ClusterIP         
+ 
+ 
+diff --git a/project_one/screenshots/docker-run-local.png b/project_one/screenshots/docker-run-local.png
+index 012bb56..36bedb0 100644
+Binary files a/project_one/screenshots/docker-run-local.png and b/project_one/screenshots/docker-run-local.png differ
