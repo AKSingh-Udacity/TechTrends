@@ -3,14 +3,14 @@ kind: Deployment
 metadata:
   labels:
     app: {{ .Values.name }}
-    name: techtrends
+    name: {{ .Values.name }}   #mentor-to-do-remove hardcoded
   namespace: {{ .Values.namespace.name }}
 
 spec:
   replicas: {{ .Values.replicaCount }} 
   selector:
     matchLabels:
-      app: techtrends
+      app: {{ .Values.name }}
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -19,12 +19,12 @@ spec:
   template:
     metadata:
       labels:
-        app: techtrends
+        app: {{ .Values.name }}
     spec:
       containers:
-      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+      - image: aksresonance/{{ .Values.image.repository }}:{{ .Values.image.tag }}    #docker-hub-user-added
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        name: techtrends
+        name: {{ .Values.name }}
         ports:
         - containerPort: {{ .Values.ports.containerPort }}
           protocol : {{ .Values.containerPorts.http.protocol }}

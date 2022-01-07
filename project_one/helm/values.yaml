@@ -5,7 +5,7 @@ apiVersion: v1
 kind: values
 
 #Namespace for the ojject identity for sandbox namespace
-Namespace:
+namespace:
   name: sandbox
 
 #service is defined for our helm 
@@ -22,7 +22,7 @@ image:
   tag: latest
   pullPolicy: ifNotPresent
 
-replicaCOunt: 1
+replicaCount: 1    #corrected typo error replicaCOunt
 
 #Set the resource limits and requests for an application
 resources: 
@@ -39,17 +39,15 @@ ports:
 
 #define the rules for liveness port, verify the application on healthz route.
 #on application port 3111. Application is not responsive then pod will automatically restarted.     
-livenessPort:
+livenessProbe:                    #mentor-to-do typo error port to probe
   httpGet:
     path: "/healthz"
-    port: 3111 
 
 #verify the application on the healthz route
 #on application port 3111.This pod take traffic if application is responsive.    
-readinessPort:
+readinessProbe:
   httpGet:
     path: "/healthz"
-    port: 3111
 
 
 
